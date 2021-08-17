@@ -1,7 +1,7 @@
 --
 -- Tarefa 102554 - 05/08/2021 - Pedro.Pereira - v1.00
 --
-CREATE OR REPLACE FUNCTION EP__ERG_PM_GERALICAFAST_01(P_NUMFUNC  NUMBER,
+CREATE FUNCTION EP__ERG_PM_GERALICAFAST_01(P_NUMFUNC  NUMBER,
                                             P_RESULT   ERG_PM_RESULTPRONT%ROWTYPE,
                                             P_DECISAO  ERG_PM_DECISAO%ROWTYPE,
                                             P_CONTERRO IN OUT NUMBER,
