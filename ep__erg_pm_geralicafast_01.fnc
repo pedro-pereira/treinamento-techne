@@ -21,7 +21,7 @@ IS
   v_ep 				      boolean;
   v_conterro 		    number :=0;
 
-  --procura licenças concedidas anteriormente na perícia inicial e prorrogações, além dos dias 
+  --procura licenÃ§as concedidas anteriormente na perÃ­cia inicial e prorrogaÃ§Ãµes, alÃ©m dos dias 
   CURSOR c_lic_ini_pror IS
     SELECT l.dtini, l.dtfim, (l.dtfim-l.dtini+1) as numdias, l.codfreq
       FROM lic_afast l, erg_pm_freq_decisao f
@@ -72,7 +72,7 @@ IS
                    
     ORDER BY dtini DESC;
 
-  --procura licenças concedidas anteriormente nos códigos de frequencia da decisão informada
+  --procura licenÃ§as concedidas anteriormente nos cÃ³digos de frequencia da decisÃ£o informada
   CURSOR c_licencas IS
     SELECT l.dtini, l.dtfim, (l.dtfim-l.dtini+1) as numdias, l.codfreq
       FROM lic_afast l, erg_pm_freq_decisao f
@@ -90,7 +90,7 @@ IS
       WHERE decisao = p_decisao.decisao
     ORDER BY diasafast;
   --
-  -- procedimento para inserir em lic_afast, salvando os erros ocorridos sem interromper a execução
+  -- procedimento para inserir em lic_afast, salvando os erros ocorridos sem interromper a execuÃ§Ã£o
   --
   PROCEDURE INS_LICAFAST (p_dtini DATE, p_dias NUMBER, p_codfreq NUMBER, p_tipofreq VARCHAR2)
   IS
@@ -108,7 +108,7 @@ IS
     END IF;
 
 
-    -- TAREFA 43611: COPIAR AS PUBLICAÇÕES PARA A TABELA DE LICAFAST
+    -- TAREFA 43611: COPIAR AS PUBLICAÃ‡Ã•ES PARA A TABELA DE LICAFAST
     IF p_result.pontpubl is null THEN
       v_pont := NULL;
     ELSE
@@ -134,7 +134,7 @@ IS
          DTPREVFIM, EMP_CODIGO,RESULTPRONT, PONTPUBL)
       VALUES
         (P_NUMFUNC, P_RESULT.NUMVINC, p_dtini, p_dtini+p_dias-1, p_tipofreq,
-         p_CODFREQ, 'Gerado por perícia médica, laudo número: '||P_RESULT.RESULTPRONT ,
+         p_CODFREQ, 'Gerado por perÃ­cia mÃ©dica, laudo nÃºmero: '||P_RESULT.RESULTPRONT ,
          p_dtini+p_dias-1, FLAG_PACK.GET_EMPRESA, P_RESULT.RESULTPRONT, V_PONT);
     ELSE
       INSERT INTO LIC_AFAST
@@ -143,7 +143,7 @@ IS
          DTPREVFIM, EMP_CODIGO,RESULTPRONT, PONTPUBL)
       VALUES
         (P_NUMFUNC, P_RESULT.NUMVINC, p_dtini, NULL, p_tipofreq,
-         p_CODFREQ, 'Gerado por perícia médica, laudo número: '||P_RESULT.RESULTPRONT ,
+         p_CODFREQ, 'Gerado por perÃ­cia mÃ©dica, laudo nÃºmero: '||P_RESULT.RESULTPRONT ,
          NULL, FLAG_PACK.GET_EMPRESA, P_RESULT.RESULTPRONT, V_PONT);    
     END IF;
 
@@ -168,20 +168,20 @@ IS
 
   END;-- ins_afast
 BEGIN
-  --Se gera LIC_AFAST e é APOSENTADORIA POR INVLIDEZ então LIC_AFAST.DTFIM não é obrigatório
+  --Se gera LIC_AFAST e Ã© APOSENTADORIA POR INVLIDEZ entÃ£o LIC_AFAST.DTFIM nÃ£o Ã© obrigatÃ³rio
   IF NVL(P_DECISAO.GERA_LICAFAST, 'N') = 'S' OR NVL(P_DECISAO.FLEX_CAMPO_01, 'N') = 'S' THEN -- Tarefa 102554
     v_erro_7517 := false;  -- tarefa 48046
     --- Tarefa 100943
     p_conterro:= NVL(p_conterro,0);
     --
-    -- quando a decisão pode gerar múltiplos registros em lic_afast, dependendo do número de dias concedido, precisa
-    -- fazer a contagem dos dias acumulados de licenças anteriores
-    -- O campo INTERVALO_DIAS da tabela Decisão indica o intervalo para zerar a contagem.
-    -- se ele não for informado, é porque a decisão não vai gerar múltiplos registros, então não precisa contar acumulados.
+    -- quando a decisÃ£o pode gerar mÃºltiplos registros em lic_afast, dependendo do nÃºmero de dias concedido, precisa
+    -- fazer a contagem dos dias acumulados de licenÃ§as anteriores
+    -- O campo INTERVALO_DIAS da tabela DecisÃ£o indica o intervalo para zerar a contagem.
+    -- se ele nÃ£o for informado, Ã© porque a decisÃ£o nÃ£o vai gerar mÃºltiplos registros, entÃ£o nÃ£o precisa contar acumulados.
     --
     v_dias_acumulados := 0;
     --
-    -- faz a contagem de dias acumulados quando necessário, senão fica com zero mesmo.
+    -- faz a contagem de dias acumulados quando necessÃ¡rio, senÃ£o fica com zero mesmo.
     IF nvl(p_decisao.intervalo_dias,0) > 0 THEN
       v_dtiniproxlic := p_result.dtini;
       FOR v_lic in c_licencas LOOP
@@ -199,18 +199,18 @@ BEGIN
       END LOOP;
     END IF; -- contagem de dias acumulados
     --
-    -- passa pelas faixas gerando dias de licença em cada faixa
+    -- passa pelas faixas gerando dias de licenÃ§a em cada faixa
     v_diaslic := p_result.numdias;
     v_diainilic := p_result.dtini;
     v_max := 0;
     --
     FOR v_faixas in c_faixas LOOP
-      -- a licença cabe completamente nessa faixa
+      -- a licenÃ§a cabe completamente nessa faixa
       IF (v_dias_acumulados+v_diaslic) <= v_faixas.diasafast OR v_faixas.diasafast is NULL THEN
         ins_licafast (v_diainilic, v_diaslic, v_faixas.CODFREQ, v_faixas.tipofreq);
         v_diaslic := 0; -- acabou.
       --
-      -- ainda tem dias para usar nessa faixa, mas não cabe tudo
+      -- ainda tem dias para usar nessa faixa, mas nÃ£o cabe tudo
       -- Tarefa 46369 - Inicio
       ELSIF v_dias_acumulados < v_faixas.diasafast THEN
       -- Tarefa 46369 - Fim
@@ -229,7 +229,7 @@ BEGIN
       END IF;
     END LOOP;  -- faixas de codigo
     --
-    -- verifica se não ficou nenhum dia de licença fora das faixas
+    -- verifica se nÃ£o ficou nenhum dia de licenÃ§a fora das faixas
     IF v_diaslic > 0 THEN
       ERGON_ERRO_PACK.TRATA_ERRO(7513, p_result.resultpront, p_decisao.sigla, v_max, p_result.numdias);
     END IF;
@@ -241,14 +241,14 @@ BEGIN
     --- Tarefa 100943
     p_conterro:=NVL(p_conterro,0);
     --
-    -- quando a decisão pode gerar múltiplos registros em lic_afast, dependendo do número de dias concedido, precisa
-    -- fazer a contagem dos dias acumulados de licenças anteriores
-    -- O campo INTERVALO_DIAS da tabela Decisão indica o intervalo para zerar a contagem.
-    -- se ele não for informado, é porque a decisão não vai gerar múltiplos registros, então não precisa contar acumulados.
+    -- quando a decisÃ£o pode gerar mÃºltiplos registros em lic_afast, dependendo do nÃºmero de dias concedido, precisa
+    -- fazer a contagem dos dias acumulados de licenÃ§as anteriores
+    -- O campo INTERVALO_DIAS da tabela DecisÃ£o indica o intervalo para zerar a contagem.
+    -- se ele nÃ£o for informado, Ã© porque a decisÃ£o nÃ£o vai gerar mÃºltiplos registros, entÃ£o nÃ£o precisa contar acumulados.
     --
     v_dias_acumulados := 0;
     --
-    -- faz a contagem de dias acumulados quando necessário, senão fica com zero mesmo.
+    -- faz a contagem de dias acumulados quando necessÃ¡rio, senÃ£o fica com zero mesmo.
     IF nvl(p_decisao.intervalo_dias,0) > 0 THEN
       v_dtiniproxlic := p_result.dtini;
       FOR v_lic in c_lic_ini_pror LOOP
@@ -266,15 +266,15 @@ BEGIN
       END LOOP;
     END IF; -- contagem de dias acumulados
     --
-    -- passa pelas faixas gerando dias de licença em cada faixa
+    -- passa pelas faixas gerando dias de licenÃ§a em cada faixa
     v_diaslic := p_result.numdias;
     v_diainilic := p_result.dtini;
     v_max := 0;
     --
     FOR v_faixas in c_faixas LOOP
-      -- Tarefa 50623 início
+      -- Tarefa 50623 inÃ­cio
       /*
-             -- Tarefa 48046 início
+             -- Tarefa 48046 inÃ­cio
              v_diasafast := v_faixas.diasafast;
              if (v_dias_acumulados+v_diaslic) > v_faixas.diasafast then
                v_erro_7517 := true;
@@ -284,12 +284,12 @@ BEGIN
         */
       -- Tarefa 50623 fim
 
-      -- a licença cabe completamente nessa faixa
+      -- a licenÃ§a cabe completamente nessa faixa
       IF (v_dias_acumulados+v_diaslic) <= v_faixas.diasafast OR v_faixas.diasafast is NULL THEN
         ins_licafast (v_diainilic, v_diaslic, v_faixas.CODFREQ, v_faixas.tipofreq);
         v_diaslic := 0; -- acabou.
       --
-      -- ainda tem dias para usar nessa faixa, mas não cabe tudo
+      -- ainda tem dias para usar nessa faixa, mas nÃ£o cabe tudo
       -- Tarefa 46369 - Inicio
       ELSIF v_dias_acumulados < v_faixas.diasafast THEN
       -- ELSIF v_dias_acumulados <= v_faixas.diasafast THEN
@@ -309,7 +309,7 @@ BEGIN
       END IF;
     END LOOP;  -- faixas de codigo
     --
-    -- Tarefa 50623 início
+    -- Tarefa 50623 inÃ­cio
     /*
         -- Tarefa 48046
         if v_erro_7517 then
@@ -318,7 +318,7 @@ BEGIN
       */
     -- Tarefa 50623 fim
     --
-    -- verifica se não ficou nenhum dia de licença fora das faixas
+    -- verifica se nÃ£o ficou nenhum dia de licenÃ§a fora das faixas
     IF v_diaslic > 0 THEN
       ERGON_ERRO_PACK.TRATA_ERRO(7513, p_result.resultpront, p_decisao.sigla, v_max, p_result.numdias);
     END IF;
@@ -338,7 +338,7 @@ END;
 INSERT INTO HAD_FIX
   (IDENT, DESCRICAO, DATAALTERACAO, SIS, TIPOOBJ, OBJETO, VERSAO)
 VALUES
-  ('TAREFA102554', 'Correção da condição para juntar períodos de licenças consecutivas.',
+  ('TAREFA102554', 'CorreÃ§Ã£o da condiÃ§Ã£o para juntar perÃ­odos de licenÃ§as consecutivas.',
    TO_DATE('05/08/2021', 'DD/MM/YYYY'), 'C_ERGON_PMCG', 'FUNCTION', 'EP__ERG_PM_GERALICAFAST_01', '1.00')
 /
 COMMIT
