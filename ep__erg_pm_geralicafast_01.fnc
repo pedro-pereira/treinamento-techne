@@ -1,5 +1,5 @@
 --
--- Tarefa 102554 - 05/08/2021 - Pedro.Pereira - v1.00
+-- Tarefa 123456 - 05/08/2021 - Pedro.Pereira - v1.00
 --
 CREATE FUNCTION EP__ERG_PM_GERALICAFAST_01(P_NUMFUNC  NUMBER,
                                             P_RESULT   ERG_PM_RESULTPRONT%ROWTYPE,
