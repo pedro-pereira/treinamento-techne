@@ -1,5 +1,6 @@
 --
 -- Tarefa 123456 - 05/08/2021 - Pedro.Pereira - v1.00
+-- Tarefa Teste Pedro Montenegro - 20/08/2021
 --
 -- ALTERADO POR SOLON
 CREATE FUNCTION EP__ERG_PM_GERALICAFAST_01(P_NUMFUNC  NUMBER,
@@ -20,7 +21,7 @@ IS
   v_erro_7517       boolean;
   v_diasafast       number;
   v_ep 				      boolean;
-  v_conterro 		    number :=0;
+  v_conterro 		    number :=100;
 
   --procura licenças concedidas anteriormente na perícia inicial e prorrogações, além dos dias 
   CURSOR c_lic_ini_pror IS
