@@ -6,7 +6,7 @@ CREATE FUNCTION EP__ERG_PM_GERALICAFAST_01(P_NUMFUNC  NUMBER,
                                             P_DECISAO  ERG_PM_DECISAO%ROWTYPE,
                                             P_CONTERRO IN OUT NUMBER,
                                             P_CONCLUIR OUT NUMBER)
-RETURN BOOLEAN
+RETURN NUMBER
 IS
   v_dtiniproxlic    date;
   v_diainilic       date;
