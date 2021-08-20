@@ -1,7 +1,7 @@
---
+-- 
 -- Tarefa 123456 - 05/08/2021 - Pedro.Pereira - v1.00
+-- Alteração Martônio
 -- Tarefa Teste Pedro Montenegro - 20/08/2021
---
 -- ALTERADO POR SOLON
 CREATE FUNCTION EP__ERG_PM_GERALICAFAST_01(P_NUMFUNC  NUMBER,
                                             P_RESULT   ERG_PM_RESULTPRONT%ROWTYPE,
