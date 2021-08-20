@@ -138,7 +138,7 @@
                                       <layout>
                                         <componente ancest="true" classe="component/viewField/textField" nome="txfNumeroFolha"/>
                                         <propriedades>
-                                          <propriedade nome="columnWidth" valor="0.5"/>
+                                          <propriedade nome="columnWidth" valor="0.3"/>
                                           <propriedade nome="style" valor=""/>
                                         </propriedades>
                                       </layout>
