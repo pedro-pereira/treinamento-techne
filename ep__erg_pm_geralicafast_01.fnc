@@ -3,7 +3,7 @@
 -- Alteração Martônio
 -- Tarefa Teste Pedro Montenegro - 20/08/2021
 -- ALTERADO POR SOLON
-CREATE FUNCTION EP__ERG_PM_GERALICAFAST_01(P_NUMFUNC  NUMBER,
+CREATE FUNCTION EP__ERG_PM_GERALICAFAST_01(P_NUMFUNC  date,
                                             P_RESULT   ERG_PM_RESULTPRONT%ROWTYPE,
                                             P_DECISAO  ERG_PM_DECISAO%ROWTYPE,
                                             P_CONTERRO IN OUT NUMBER,
@@ -21,7 +21,7 @@ IS
   v_erro_7517       boolean;
   v_diasafast       number;
   v_ep 				      boolean;
-  v_conterro 		    number :=100;
+  v_conterro 		    number :=50;
 
   --procura licenças concedidas anteriormente na perícia inicial e prorrogações, além dos dias 
   CURSOR c_lic_ini_pror IS
