@@ -3,6 +3,7 @@
 -- Alteração Martônio
 -- Tarefa Teste Pedro Montenegro - 20/08/2021
 -- ALTERADO POR SOLON
+-- daniel teste dia 23/09/2021
 CREATE FUNCTION EP__ERG_PM_GERALICAFAST_01(P_NUMFUNC  date,
                                             P_RESULT   ERG_PM_RESULTPRONT%ROWTYPE,
                                             P_DECISAO  ERG_PM_DECISAO%ROWTYPE,
